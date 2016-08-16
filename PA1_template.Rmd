@@ -1,25 +1,154 @@
 ---
 title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+author: "Hanna Zhao"
+date: "August 15, 2016"
+output: html_document;md_document
 
+---
 
 ## Loading and preprocessing the data
 
+First step: load "activity.csv" file from R working directory and assign it to a data frame named "activity". 
+It has three columns:  
+*- steps: Number of steps taking in a 5-minute interval  
+- date: The date on which the measurement was taken in YYYY-MM-DD format  
+- interval: Identifier for the 5-minute interval in which measurement was taken*
+
+```{r loaddata, echo=TRUE}
+activity<-read.csv("D:/Data Scientist/R_working_directory/activity.csv",na.strings="NA")
+head(activity)
+```
+
+Convert "date" column to Date class by "as.Date" function.
+
+```{r convert, echo=TRUE}
+activity$date<-as.Date(activity$date,"%Y-%m-%d")
+```
 
 
 ## What is mean total number of steps taken per day?
 
+Calculate total number of steps per day.
 
+```{r simulation, echo=TRUE}
+AC_by_day<-aggregate(activity$steps,by=list(activity$date),FUN="sum",na.rm=TRUE)
+names(AC_by_day)<-c("date","total.steps")
+```
+
+Here is the histogram of the total number of steps per day.
+```{r, echo=TRUE}
+library(ggplot2)
+g<-qplot(total.steps,data=AC_by_day,binwidth=500)
+g+labs(title="Total Steps per Day")
+#dev.copy(png,"plot1.png")
+#dev.off()
+```
+
+Mean of total daily steps is:
+```{r,echo=TRUE}
+StpMean<-mean(AC_by_day$total.steps,na.rm=TRUE)
+StpMean
+```
+
+Median of total daily steps is:
+```{r,echo=TRUE}
+StpMedian<-median(AC_by_day$total.steps,na.rm=TRUE)
+StpMedian
+```
 
 ## What is the average daily activity pattern?
+Calculate average steps at each 5 mins interval order across all days. Plot the average steps vs interval order.
+```{r,echo=TRUE}
+AC_by_Int<-aggregate(activity$steps,by=list(activity$interval),FUN="mean",na.rm=TRUE)
+names(AC_by_Int)<-c("Interval","steps")
 
+qplot(AC_by_Int$Interval,AC_by_Int$steps,
+         geom=c("line"),
+         xlab="Interval Order",ylab="Average steps across all days"
+      )
+
+#dev.copy(png,"plot2.png")
+#dev.off()
+```
+
+The maximum steps in 5-min interval is:
+```{r,echo=TRUE}
+IntStepMax<-AC_by_Int[which.max(AC_by_Int$steps),1]
+IntStepMax
+```
 
 
 ## Imputing missing values
+Original dataset contains many missing data points. Total number of NA rows is:
+```{r,echo=TRUE}
+sum(is.na(activity$steps))
+```
 
+Now let's add missing values by using the mean for that 5-min interval and save it to a new data frame named "acivity2".
+```{r,echo=TRUE}
+ind_NA<-which(is.na(activity$steps)==TRUE)
+activity2<-activity
 
+for (i in ind_NA) {
+      activity2$steps[i]<-AC_by_Int$steps[AC_by_Int$Interval==activity2$interval[i]]
+}
+```
+
+Check the missing values in "activity2". 
+```{r,echo=TRUE}
+sum(is.na(activity2))
+```
+
+Plot the histogram of the total number of steps per day. the new data frame "activity2" after adding missing values. 
+```{r.echo=TRUE}
+AC_by_day2<-aggregate(activity2$steps,by=list(activity2$date),FUN="sum",na.rm=TRUE)
+names(AC_by_day2)<-c("date","total.steps")
+
+g<-qplot(total.steps,data=AC_by_day2,binwidth=500)
+g+labs(title="Total Steps per Day after Adding Missing Values")
+
+#dev.copy(png,"plot3.png")
+#dev.off()
+```
+
+Compare it with the distogram from original data. Before adding missing values, the distogram of original data has a lot of actificial zero points due to missing values. The mean and median value of total daily steps calculated from original dataset are also misleading due to this issue. 
+
+Mean of total daily steps after adding missing values.
+```{r,echo=TRUE}
+StpMean2<-mean(AC_by_day2$total.steps,na.rm=TRUE)
+StpMean2
+```
+
+Median of total daily steps after adding missing values.
+```{r,echo=TRUE}
+StpMedian2<-median(AC_by_day2$total.steps,na.rm=TRUE)
+StpMedian2
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?
+First add weekday and weekend information to "activity2" data frame. Then calculate the average steps at each 5-min interval for each category.
+```{r,echo=TRUE}
+tmp<-weekdays(activity2$date)
+tmp2<-sapply(tmp,function(x) {
+              if (x=="Saturday"|x=="Sunday") "Weekend"
+              else   "Weekday"
+})
+
+activity2<-cbind(activity,tmp,tmp2)
+names(activity2)[4:5]<-c("Weekday.name","Weekday")
+
+AC_by_Int2<-aggregate(activity2$steps,by=list(activity2$Weekday,activity$interval),FUN="mean",na.rm=TRUE)
+names(AC_by_Int2)<-c("Weekday","Interval","steps")
+AC_by_Int2$Weekday<-as.factor(AC_by_Int2$Weekday)
+```
+
+Plot the activity pattern for both weekdays and weekends.
+```{r,echo=TRUE}
+g<-ggplot(AC_by_Int2,aes(Interval,steps))
+g+geom_line()+facet_grid(Weekday~.)
+
+#dev.copy(png,"plot4.png")
+#dev.off()
+```
+
+
