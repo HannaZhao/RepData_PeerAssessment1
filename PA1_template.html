@@ -126,10 +126,10 @@ $(document).ready(function () {
 <div id="loading-and-preprocessing-the-data" class="section level2">
 <h2>Loading and preprocessing the data</h2>
 <p>First step: load “activity.csv” file from R working directory and assign it to a data frame named “activity”. It has three columns:<br />
-<em>- steps: Number of steps taking in a 5-minute interval<br />
+- steps: Number of steps taking in a 5-minute interval<br />
 - date: The date on which the measurement was taken in YYYY-MM-DD format<br />
-- interval: Identifier for the 5-minute interval in which measurement was taken</em></p>
-<pre class="r"><code>activity&lt;-read.csv(&quot;D:/Data Scientist/R_working_directory/activity.csv&quot;,na.strings=&quot;NA&quot;)
+- interval: Identifier for the 5-minute interval in which measurement was taken</p>
+<pre class="r"><code>activity&lt;-read.csv(&quot;D:/Data Scientist/R_working_directory/RepData_PeerAssessment1/activity.csv&quot;,na.strings=&quot;NA&quot;)
 head(activity)</code></pre>
 <pre><code>##   steps       date interval
 ## 1    NA 2012-10-01        0

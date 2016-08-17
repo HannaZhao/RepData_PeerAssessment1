@@ -3,13 +3,13 @@ Loading and preprocessing the data
 
 First step: load "activity.csv" file from R working directory and assign
 it to a data frame named "activity". It has three columns:  
-*- steps: Number of steps taking in a 5-minute interval  
+- steps: Number of steps taking in a 5-minute interval  
 - date: The date on which the measurement was taken in YYYY-MM-DD
 format  
 - interval: Identifier for the 5-minute interval in which measurement
-was taken*
+was taken
 
-    activity<-read.csv("D:/Data Scientist/R_working_directory/activity.csv",na.strings="NA")
+    activity<-read.csv("D:/Data Scientist/R_working_directory/RepData_PeerAssessment1/activity.csv",na.strings="NA")
     head(activity)
 
     ##   steps       date interval
