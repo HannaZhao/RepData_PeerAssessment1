@@ -2,7 +2,7 @@
 title: "Reproducible Research: Peer Assessment 1"
 author: "Hanna Zhao"
 date: "August 15, 2016"
-output: html_document;md_document
+output: md_document
 
 ---
 
@@ -40,8 +40,6 @@ Here is the histogram of the total number of steps per day.
 library(ggplot2)
 g<-qplot(total.steps,data=AC_by_day,binwidth=500)
 g+labs(title="Total Steps per Day")
-#dev.copy(png,"plot1.png")
-#dev.off()
 ```
 
 Mean of total daily steps is:
@@ -66,9 +64,6 @@ qplot(AC_by_Int$Interval,AC_by_Int$steps,
          geom=c("line"),
          xlab="Interval Order",ylab="Average steps across all days"
       )
-
-#dev.copy(png,"plot2.png")
-#dev.off()
 ```
 
 The maximum steps in 5-min interval is:
@@ -107,8 +102,6 @@ names(AC_by_day2)<-c("date","total.steps")
 g<-qplot(total.steps,data=AC_by_day2,binwidth=500)
 g+labs(title="Total Steps per Day after Adding Missing Values")
 
-#dev.copy(png,"plot3.png")
-#dev.off()
 ```
 
 Compare it with the distogram from original data. Before adding missing values, the distogram of original data has a lot of actificial zero points due to missing values. The mean and median value of total daily steps calculated from original dataset are also misleading due to this issue. 
@@ -147,8 +140,6 @@ Plot the activity pattern for both weekdays and weekends.
 g<-ggplot(AC_by_Int2,aes(Interval,steps))
 g+geom_line()+facet_grid(Weekday~.)
 
-#dev.copy(png,"plot4.png")
-#dev.off()
 ```
 
 

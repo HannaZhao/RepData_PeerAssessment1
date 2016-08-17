@@ -40,9 +40,6 @@ Here is the histogram of the total number of steps per day.
 
 ![](PA1_template_files/figure-markdown_strict/unnamed-chunk-1-1.png)
 
-    #dev.copy(png,"plot1.png")
-    #dev.off()
-
 Mean of total daily steps is:
 
     StpMean<-mean(AC_by_day$total.steps,na.rm=TRUE)
@@ -72,9 +69,6 @@ Plot the average steps vs interval order.
           )
 
 ![](PA1_template_files/figure-markdown_strict/unnamed-chunk-4-1.png)
-
-    #dev.copy(png,"plot2.png")
-    #dev.off()
 
 The maximum steps in 5-min interval is:
 
@@ -119,9 +113,6 @@ frame "activity2" after adding missing values.
     g+labs(title="Total Steps per Day after Adding Missing Values")
 
 ![](PA1_template_files/figure-markdown_strict/unnamed-chunk-9-1.png)
-
-    #dev.copy(png,"plot3.png")
-    #dev.off()
 
 Compare it with the distogram from original data. Before adding missing
 values, the distogram of original data has a lot of actificial zero
@@ -169,6 +160,3 @@ Plot the activity pattern for both weekdays and weekends.
     g+geom_line()+facet_grid(Weekday~.)
 
 ![](PA1_template_files/figure-markdown_strict/unnamed-chunk-13-1.png)
-
-    #dev.copy(png,"plot4.png")
-    #dev.off()
